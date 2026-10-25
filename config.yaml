@@ -1,0 +1,120 @@
+# Angebots-Wächter – Konfiguration
+min_discount: 0.30        # nur Angebote ab 30 % Rabatt
+max_items_per_push: 8     # Länge der täglichen Nachricht begrenzen
+ntfy_topic_env: NTFY_TOPIC  # Topic kommt aus Umgebungsvariable / GitHub-Secret
+
+# Nur vertrauenswürdige Shops. country = Land des Shops (Lieferung innerhalb CH bzw. DE = zollfrei).
+# search_url: {q} wird durch den Suchbegriff ersetzt. URLs bitte beim ersten Lauf prüfen.
+shops:
+  galaxus:
+    name: Galaxus
+    country: CH
+    search_url: "https://www.galaxus.ch/de/search?q={q}"
+  decathlon:
+    name: Decathlon CH
+    country: CH
+    search_url: "https://www.decathlon.ch/de/search?Ntt={q}"
+  aktionis:
+    name: Aktionis (Migros/Coop/Denner u. a.)
+    country: CH
+    search_url: "https://www.aktionis.ch/suche?q={q}"
+  zalando:
+    name: Zalando CH
+    country: CH
+    search_url: "https://www.zalando.ch/katalog/?q={q}"
+  # --- Deutschland (Lieferung innerhalb DE, zollfrei) ---
+  galaxus_de:
+    name: Galaxus DE
+    country: DE
+    currency: "€"
+    search_url: "https://www.galaxus.de/de/search?q={q}"
+  zalando_de:
+    name: Zalando DE
+    country: DE
+    currency: "€"
+    search_url: "https://www.zalando.de/katalog/?q={q}"
+  decathlon_de:
+    name: Decathlon DE
+    country: DE
+    currency: "€"
+    search_url: "https://www.decathlon.de/search?Ntt={q}"
+  mediamarkt_de:
+    name: MediaMarkt DE
+    country: DE
+    currency: "€"
+    search_url: "https://www.mediamarkt.de/de/search.html?query={q}"
+  marktguru:
+    name: Marktguru (Edeka/Rewe/Lidl u. a.)
+    country: DE
+    currency: "€"
+    search_url: "https://www.marktguru.de/search?q={q}"
+
+# Kategorien: queries = Suchbegriffe, shops = wo gesucht wird,
+# require = Regex, der im Titel vorkommen muss, exclude = Regex, der nicht vorkommen darf
+categories:
+  kinderschuhe:
+    label: Kinderschuhe
+    shops: [galaxus, zalando, galaxus_de, zalando_de]
+    queries:
+      - "Puma Kinder Schuhe"
+      - "Adidas Kinder Schuhe"
+      - "Nike Kinder Schuhe"
+      - "New Balance Kinder Schuhe"
+      - "Skechers Kinder Schuhe"
+    require: '(?i)(puma|adidas|nike|new balance|skechers|sketchers)'
+    size_regex: '(?<!\d)(30|36)(?!\d)'
+  kinderkleider:
+    label: Kinderkleider
+    shops: [galaxus, zalando, galaxus_de, zalando_de]
+    queries:
+      - "Puma Kinder Kleid 128"
+      - "Adidas Kinder Kleid 140"
+      - "Nike Kinder Bekleidung 128"
+      - "New Balance Kinder Bekleidung 140"
+      - "Skechers Kinder Bekleidung"
+    require: '(?i)(puma|adidas|nike|new balance|skechers|sketchers)'
+    size_regex: '(?<!\d)(128|140)(?!\d)'
+  wein:
+    label: Wein
+    shops: [aktionis, marktguru]
+    queries:
+      - "La Encina Ribera del Duero"
+      - "Pago de los Capellanes Reserva"
+      - "Legaris Reserva"
+      - "Château Pech-Latt Corbières"
+      - "Staatsschreiber Zürich Blanc"
+    require: '(?i)(encina|capellanes|legaris|pech-?latt|staatsschreiber)'
+  lamm:
+    label: Lammfleisch
+    shops: [aktionis, marktguru]
+    queries: ["Lammfleisch Schweiz", "Lammfleisch Deutschland", "Lamm Gigot", "Lammracks"]
+    require: '(?i)lamm'
+    origin_regex: '(?i)(schweiz|swiss|\bCH\b|deutschland|\bDE\b)'
+    exclude: '(?i)(neuseeland|australien|irland|island|spanien|frankreich)'
+  bio:
+    label: Bio Obst & Gemüse
+    shops: [aktionis, marktguru]
+    queries: ["Bio Obst", "Bio Gemüse", "Naturaplan Gemüse", "Bio Früchte"]
+    require: '(?i)bio|naturaplan|demeter'
+  apple_watch:
+    label: Apple Watch
+    shops: [galaxus, galaxus_de, mediamarkt_de]
+    queries: ["Apple Watch Series", "Apple Watch SE", "Apple Watch Ultra"]
+    require: '(?i)apple watch'
+  ski:
+    label: Kinder-Ski
+    shops: [decathlon, galaxus, decathlon_de, galaxus_de]
+    queries: ["Kinder Ski", "Ski Kinder Set"]
+    require: '(?i)(kinder|junior|kids|jr)'
+    exclude: '(?i)(skischuh|stock|handschuh)'
+  skihelm:
+    label: Kinder-Skihelm
+    shops: [decathlon, galaxus, decathlon_de, galaxus_de]
+    queries: ["Kinder Skihelm", "Skihelm Junior"]
+    require: '(?i)(kinder|junior|kids|jr)'
+  velohelm:
+    label: Kinder-Velohelm
+    shops: [decathlon, galaxus, decathlon_de, galaxus_de]
+    queries: ["Kinder Velohelm", "Fahrradhelm Kinder"]
+    require: '(?i)(kinder|junior|kids|jr)'
+    brands: '(?i)(abus|giro|uvex|bell|scott|met|lazer|kask|btwin|decathlon|specialized|trek|cratoni|alpina)'
